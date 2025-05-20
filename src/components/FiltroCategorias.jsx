@@ -1,5 +1,5 @@
 const FiltroCategorias = ({ categorias, filtro, onChange }) => (
-    <div className="mb-4">
+<div className="mb-4">
       <label htmlFor="categoriaFiltro" className="form-label">Seleccione la categoría o Todas:</label>
       <select
         id="categoriaFiltro"
