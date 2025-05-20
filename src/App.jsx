@@ -1,34 +1,62 @@
+// Importación de React
 import React from 'react';
+// Importación de componentes de React Router para el manejo de rutas
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
-import Navbar from './components/Navbar';
-import Header from './components/Header';
-import Footer from './components/Footer';
-import Inicio from './pages/Inicio';
-import QuienesSomos from './pages/QuienesSomos';
-import Productos from './pages/Productos';
-import Resenias from './pages/Resenias';
-import Contacto from './pages/Contacto';
 
+// Importación de componentes personalizados de la aplicación
+import Navbar from './components/Navbar';       // Barra de navegación superior
+import Header from './components/Header';       // Encabezado (visible en todas las páginas excepto la principal)
+import Footer from './components/Footer';       // Pie de página común a todas las vistas
+import ProductoDetalle from './components/ProductoDetalle'; // importa el nuevo componente
+// Importación de las páginas de la aplicación
+import Inicio from './pages/Inicio';            // Página de inicio
+import QuienesSomos from './pages/QuienesSomos';// Página "¿Quiénes somos?"
+import Productos from './pages/Productos';      // Página de productos
+import Resenias from './pages/Resenias';        // Página de reseñas de usuarios o productos
+import Contacto from './pages/Contacto';        // Página de contacto
+
+// Componente principal de la aplicación
 const App = () => {
-  const location = useLocation(); // Hook para obtener la ruta actual
+  // Hook que nos permite acceder a la ruta actual (pathname)
+  const location = useLocation();
 
   return (
     <>
+      {/* Navbar se muestra siempre, en todas las páginas */}
       <Navbar />
-      {/* Mostrar el Header solo si no estamos en la página de Inicio */}
+
+      {/* Header solo se muestra si NO estamos en la página de inicio */}
       {location.pathname !== '/' && <Header />}
+
+      {/* Definición de las rutas de la aplicación */}
       <Routes>
+        {/* Ruta para la página de inicio */}
         <Route path="/" element={<Inicio />} />
+
+        {/* Ruta para la página "¿Quiénes somos?" */}
         <Route path="/quienes-somos" element={<QuienesSomos />} />
+
+        {/* Ruta para la página de productos */}
         <Route path="/productos" element={<Productos />} />
+
+        {/* Ruta para la página de reseñas */}
         <Route path="/resenias" element={<Resenias />} />
+
+        {/* Ruta para la página de contacto */}
         <Route path="/contacto" element={<Contacto />} />
+
+        {/* Ruta para la página de descripcion ampliada del producto */}
+        <Route path="/productos/:id" element={<ProductoDetalle />} />
       </Routes>
+
+      {/* Footer se muestra siempre, en todas las páginas */}
       <Footer />
     </>
   );
 };
 
+// AppWrapper es un componente de orden superior que envuelve a <App />
+// en un <Router> para que pueda usar React Router correctamente
 const AppWrapper = () => {
   return (
     <Router>
@@ -37,5 +65,5 @@ const AppWrapper = () => {
   );
 };
 
+// Se exporta AppWrapper como componente principal de la aplicación
 export default AppWrapper;
-
