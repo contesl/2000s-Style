@@ -1,8 +1,10 @@
 // Importación de React
 import React from 'react';
+
 // Importación de componentes de React Router para el manejo de rutas
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 
+import { AuthProvider } from './components/AuthContext'; // Importar el contexto
 // Importación de componentes personalizados de la aplicación
 import Navbar from './components/Navbar';       // Barra de navegación superior
 import Header from './components/Header';       // Encabezado (visible en todas las páginas excepto la principal)
@@ -14,6 +16,8 @@ import QuienesSomos from './pages/QuienesSomos';// Página "¿Quiénes somos?"
 import Productos from './pages/Productos';      // Página de productos
 import Resenias from './pages/Resenias';        // Página de reseñas de usuarios o productos
 import Contacto from './pages/Contacto';        // Página de contacto
+import Login from './pages/Login';
+import ProtectedRoute from './components/ProtectedRoute';
 
 // Componente principal de la aplicación
 const App = () => {
@@ -47,6 +51,17 @@ const App = () => {
 
         {/* Ruta para la página de descripcion ampliada del producto */}
         <Route path="/productos/:id" element={<ProductoDetalle />} />
+
+        <Route path="/login" element={<Login />} />
+        {/* Rutas protegidas */}
+              <Route
+                path="/carrito"
+                element={
+                  <ProtectedRoute>
+                    <Productos />
+                  </ProtectedRoute>
+                }
+              />
       </Routes>
 
       {/* Footer se muestra siempre, en todas las páginas */}
@@ -59,9 +74,11 @@ const App = () => {
 // en un <Router> para que pueda usar React Router correctamente
 const AppWrapper = () => {
   return (
-    <Router>
-      <App />
-    </Router>
+    <AuthProvider>
+      <Router>
+        <App />
+      </Router>
+    </AuthProvider>
   );
 };
 
