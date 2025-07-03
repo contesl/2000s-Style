@@ -8,7 +8,6 @@ const Contacto = () => {
   });
 
   const [errores, setErrores] = useState({});
-
   const [enviado, setEnviado] = useState(false);
 
   // Función para manejar los cambios en los campos del formulario
@@ -57,43 +56,47 @@ const Contacto = () => {
   };
 
   return (
-    <div>
-      <h1>Contacto</h1>
+    <div className="container mt-4">
+      <h1 className="text-center mb-4">Contacto</h1>
       <form onSubmit={manejarEnvio} className="formulario-contacto">
-        <div>
-          <label htmlFor="nombre">Nombre:</label>
+        <div className="mb-3">
+          <label htmlFor="nombre" className="form-label">Nombre:</label>
           <input
             type="text"
             id="nombre"
             name="nombre"
             value={formulario.nombre}
             onChange={manejarCambio}
+            className="form-control"
           />
-          {errores.nombre && <p className="error">{errores.nombre}</p>}
+          {errores.nombre && <p className="error text-danger">{errores.nombre}</p>}
         </div>
-        <div>
-          <label htmlFor="correo">Correo Electrónico:</label>
+        <div className="mb-3">
+          <label htmlFor="correo" className="form-label">Correo Electrónico:</label>
           <input
             type="email"
             id="correo"
             name="correo"
             value={formulario.correo}
             onChange={manejarCambio}
+            className="form-control"
           />
-          {errores.correo && <p className="error">{errores.correo}</p>}
+          {errores.correo && <p className="error text-danger">{errores.correo}</p>}
         </div>
-        <div>
-          <label htmlFor="mensaje">Mensaje:</label>
+        <div className="mb-3">
+          <label htmlFor="mensaje" className="form-label">Mensaje:</label>
           <textarea
             id="mensaje"
             name="mensaje"
             value={formulario.mensaje}
             onChange={manejarCambio}
+            className="form-control"
+            rows="4"
           ></textarea>
-          {errores.mensaje && <p className="error">{errores.mensaje}</p>}
+          {errores.mensaje && <p className="error text-danger">{errores.mensaje}</p>}
         </div>
-        <button type="submit">Enviar</button>
-        {enviado && <p className="exito">¡Formulario enviado con éxito!</p>}
+        <button type="submit" className="btn btn-primary w-100">Enviar</button>
+        {enviado && <p className="exito text-success mt-3">¡Formulario enviado con éxito!</p>}
       </form>
     </div>
   );

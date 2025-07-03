@@ -1,58 +1,121 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useContext, useState } from "react";
+import { AuthContext } from "./AuthContext"; // Importar el contexto de autenticación
 
-// Componente que representa una tarjeta individual de producto
-// Props:
-// - producto: objeto con los datos del producto (id, title, price, thumbnail, etc.)
-// - agregarAlCarrito: función para agregar un producto con cantidad al carrito
 const ProductoCard = ({ producto, agregarAlCarrito }) => {
+  const { isAuthenticated } = useContext(AuthContext); // Obtener el estado de autenticación
+  const navigate = useNavigate(); // Hook para redirigir al usuario
+  const [showModal, setShowModal] = useState(false); // Estado para controlar el modal
 
-  // Maneja el evento de hacer clic en "Comprar"
   const handleClick = () => {
-    // Obtiene el input asociado al producto por su ID dinámico
+    if (!isAuthenticated) {
+      setShowModal(true);
+      return;
+    }
+
     const input = document.getElementById(`cantidadProducto${producto.id}`);
-    // Parsea la cantidad seleccionada
     const cantidad = parseInt(input.value, 10);
-    // Llama a la función para agregar al carrito
     agregarAlCarrito(producto, cantidad);
   };
 
+  const handleRedirectToLogin = () => {
+    setShowModal(false);
+    navigate("/login");
+  };
+
   return (
-    <div className="col-sm-12 col-md-6 col-lg-4 mb-4">
-      <div className="card h-100">
-        
-        {/* Imagen del producto con enlace dinámico al detalle del producto */}
-        {/* Link redirige a la ruta /productos/:id usando React Router */}
+    <div className="col-12 col-md-3 mb-4"> {/* Ajustar el diseño responsivo */}
+      <div
+        className="card h-100"
+        style={{
+          margin: "0 auto", // Centrar la tarjeta
+          width: "200px", // Ajustar el ancho de la tarjeta al tamaño de la imagen
+        }}
+      >
         <Link to={`/productos/${producto.id}`}>
           <img
-            src={producto.thumbnail}        // Muestra la imagen del producto
+            src={producto.thumbnail}
             className="card-img-top"
             alt={producto.title}
-            style={{ cursor: "pointer" }}
+            style={{
+              cursor: "pointer",
+              width: "200px", // Ajustar el ancho de la imagen
+              height: "200px", // Ajustar la altura de la imagen
+              objectFit: "cover", // Asegurar que la imagen se recorte correctamente
+            }}
           />
         </Link>
-
-        {/* Cuerpo de la tarjeta con información del producto */}
-        <div className="card-body">
-          <p>{producto.title}</p>           {/* Nombre del producto */}
-          <p><strong>Precio:</strong> ${producto.price.toFixed(2)}</p>
-
-          {/* Sección de cantidad y botón para agregar al carrito */}
-          <div className="d-flex align-items-center">
-            <label htmlFor={`cantidadProducto${producto.id}`} className="me-2">Cantidad:</label>
+        <div className="card-body" style={{ textAlign: "center" }}>
+          <p>{producto.title}</p>
+          <p>
+            <strong>Precio:</strong> ${producto.price.toFixed(2)}
+          </p>
+          <div className="d-flex flex-column align-items-center">
+            <label
+              htmlFor={`cantidadProducto${producto.id}`}
+              className="mb-2"
+            >
+              Cantidad a Comprar:
+            </label>
             <input
-              type="number"                         // Campo numérico para cantidad
-              id={`cantidadProducto${producto.id}`} // ID único por producto
-              className="form-control me-2"
-              style={{ width: "120px" }}
+              type="number"
+              id={`cantidadProducto${producto.id}`}
+              className="form-control mb-2"
+              style={{
+                width: "100%",
+                maxWidth: "150px",
+                textAlign: "center",
+              }}
               min="1"
-              defaultValue="1"                      // Valor inicial
+              defaultValue="1"
             />
-            <button className="btn btn-sm btn-primary" onClick={handleClick}>
+            <button
+              className="btn btn-sm btn-primary"
+              onClick={handleClick}
+              style={{ width: "100%", maxWidth: "150px" }}
+            >
               Comprar
             </button>
           </div>
         </div>
       </div>
+
+      {showModal && (
+        <div className="modal show d-block" tabIndex="-1" role="dialog">
+          <div className="modal-dialog" role="document">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title">Atención</h5>
+                <button
+                 type="button"
+                  className="btn-close"
+                  onClick={() => setShowModal(false)}
+                  aria-label="Close"
+                ></button>
+              </div>
+              <div className="modal-body">
+                <p>Debes iniciar sesión para comprar productos.</p>
+              </div>
+              <div className="modal-footer">
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  onClick={() => setShowModal(false)}
+                >
+                  Cancelar
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-primary"
+                  onClick={handleRedirectToLogin}
+                >
+                  Iniciar Sesión
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

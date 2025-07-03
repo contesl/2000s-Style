@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 
 // Importación de componentes utilizados en esta vista
 import FiltroCategorias from "../components/FiltroCategorias";   // Componente para filtrar productos por categoría
-import ProductoCard from "../components/ProductoCard";           // Tarjeta individual de producto
+import ProductosConPaginacion from "../components/ProductosConPaginacion"; // Nuevo componente para manejar la paginación
 import ModalCarrito from "../components/ModalCarrito";           // Modal para ver y gestionar el carrito
 import ModalConfirmacion from "../components/ModalConfirmacion"; // Modal para confirmar que un producto fue agregado al carrito
 
@@ -23,7 +23,6 @@ const Productos = () => {
     return JSON.parse(sessionStorage.getItem("carrito")) || [];
   });
 
- 
   // Estado que almacena temporalmente el producto recién agregado (para mostrar confirmación)
   const [productoAgregado, setProductoAgregado] = useState(null);
 
@@ -34,15 +33,15 @@ const Productos = () => {
   useEffect(() => {
     const fetchProductos = async () => {
       try {
-        const res = await fetch("https://dummyjson.com/products");
+        const res = await fetch("https://683b11bb43bb370a8674a595.mockapi.io/2000s-style/products");
         if (!res.ok) {
           throw new Error(`HTTP error! status: ${res.status}`);
         }
 
         const data = await res.json();
 
-        // Se filtran los productos para excluir la categoría "groceries"
-        const filtrados = data.products.filter(p => p.category !== "groceries");
+        // Se filtran los productos para excluir la categoría "groceries" si es necesario
+        const filtrados = data.filter(p => p.category !== "groceries");
 
         // Se actualiza el estado con los productos y las categorías únicas
         setProductos(filtrados);
@@ -111,7 +110,7 @@ const Productos = () => {
           {error}
         </div>
       )}
-
+      <h1>Catálogo y Compra en Linea</h1>
       {/* Componente para elegir la categoría de productos */}
       <FiltroCategorias
         categorias={categorias}
@@ -119,19 +118,12 @@ const Productos = () => {
         onChange={setFiltroCategoria}
       />
 
-      {/* Lista de productos filtrados */}
-      <div className="row">
-        {productosFiltrados.map(producto => (
-          <ProductoCard
-            key={producto.id}
-            producto={producto}
-            agregarAlCarrito={agregarAlCarrito}
-            setProductoAgregado={setProductoAgregado} // Se pasa para mostrar confirmación desde la tarjeta
-          />
-        ))}
-      </div>
+      {/* Lista de productos con paginación */}
+      <ProductosConPaginacion
+        productos={productosFiltrados} // Pasar los productos filtrados
+        agregarAlCarrito={agregarAlCarrito} // Pasar la función para agregar al carrito
+      />
 
-  
       {/* Modal para ver el contenido del carrito y realizar acciones */}
       <ModalCarrito
         carrito={carrito}

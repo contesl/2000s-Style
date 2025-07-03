@@ -10,7 +10,7 @@ const ProductoDetalle = () => {
   useEffect(() => {
     const fetchProducto = async () => {
       try {
-        const res = await fetch(`https://dummyjson.com/products/${id}`);
+        const res = await fetch(`https://683b11bb43bb370a8674a595.mockapi.io/2000s-style/products/${id}`);
         if (!res.ok) throw new Error("Producto no encontrado");
         const data = await res.json();
         setProducto(data);

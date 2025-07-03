@@ -275,3 +275,35 @@ body {
     right: 5px;
   }
 }
+
+/* Estilos adicionales para dispositivos móviles */
+@media (max-width: 375px) {
+  .container {
+    padding: 10px;
+  }
+
+  .form-label {
+    font-size: 14px;
+  }
+
+  .form-control {
+    font-size: 14px;
+  }
+
+  .btn {
+    font-size: 14px;
+    padding: 8px 12px;
+  }
+
+  table {
+    font-size: 12px;
+  }
+
+  th, td {
+    padding: 5px;
+  }
+
+  .table-responsive {
+    overflow-x: auto;
+  }
+}
